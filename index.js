@@ -32,6 +32,7 @@ function visualization(err, res){
         element.dt = new Date(element.dt);
         element.AverageTemperature = parseFloat(element.AverageTemperature);
     });
+    console.log(data)
 
     var ndx = crossfilter(data);
 
