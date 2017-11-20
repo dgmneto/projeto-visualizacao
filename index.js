@@ -41,9 +41,11 @@ function visualization(err, res){
     var dateGroup = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
     var countryGroup = countryDimension.group().reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
 
+    var geoChart = dc.geoChoroplethChart("#geo-chart");
     var focuseChart = dc.lineChart("#focus-time-series-chart");
     var timeSeriesChart = dc.lineChart("#time-series-chart");
 
+    createMap(geoChart, countryDimension, countryGroup);
     createTimeSeriesChart(timeSeriesChart, focuseChart, dateDimension, dateGroup)
 
     dc.renderAll();
@@ -69,8 +71,8 @@ function avgTmpRemove(p, v){
 
 function avgTmpInit(p, v){
     return {
-    count: 0,
-    sum: 0
+        count: 0,
+        sum: 0
     };
 }
 
@@ -84,6 +86,7 @@ function createTimeSeriesChart(dcTimeSeriesChart, focuseChart, dimension, group)
     .x(d3.time.scale())
     .xUnits(d3.time.years)        
     .elasticX(true)
+    .elasticY(true)
     .brushOn(false)
     .group(group)
     .valueAccessor(p => {
@@ -100,7 +103,26 @@ function createTimeSeriesChart(dcTimeSeriesChart, focuseChart, dimension, group)
                .xUnits(d3.time.years);
 }
 
-function createMap(geojson){
+function createMap(geoChart, dimension, group){
 
+    geoChart.width(990)
+            .height(500)
+            .dimension(dimension)
+            .group(group)
+            .projection(d3.geo.mercator())
+            .colors(d3.scale.linear()
+                            .domain([-10, 30])
+                            .interpolate(d3.interpolateRgb)
+                            .range(['#00edff', '#ff0000']))
+            .overlayGeoJson(geojson.features, "Country", d => d.properties.name)
+            .valueAccessor(
+                function(p){
+                    return p.value.count ? p.value.sum/p.value.count : 0.0;
+                }
+            )
+            .title(function(d){
+                if(!d.value) console.log(d.key);
+                return "Country: " + d.key + "\nAverage Temperature: " + (d.value? d.value : 0);
+            });
 }
     
