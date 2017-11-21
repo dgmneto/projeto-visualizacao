@@ -27,7 +27,7 @@ function visualization(err, res){
 
     document.getElementById("loading-status")
     .innerHTML = "Baixado";
-    
+
     data.forEach(element => {
         element.dt = new Date(element.dt);
         element.AverageTemperature = parseFloat(element.AverageTemperature);
@@ -37,20 +37,24 @@ function visualization(err, res){
     var ndx = crossfilter(data);
 
     var dateDimension = ndx.dimension(d => d.dt);
-    var dateDimension2 = ndx.dimension(d => d.dt);    
+    var dateDimension2 = ndx.dimension(d => d.dt);
     var countryDimension = ndx.dimension(d => d.Country);
+    var heatDimension = ndx.dimension(d => [d.dt, d.Continent])
 
-    var dateGroup = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);    
+    var dateGroup = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
     var dateGroup2 = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
     var countryGroup = countryDimension.group().reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
+    var heatGroup = heatDimension.group().reduceSum(d => +d.AverageTemperature)
 
     var geoChart = dc.geoChoroplethChart("#geo-chart");
     var focuseChart = dc.lineChart("#focus-time-series-chart");
     var timeSeriesChart = dc.lineChart("#time-series-chart");
+    var heatChart = dc.heatMap("#heat-chart");
 
     createMap(geoChart, countryDimension, countryGroup);
     createTimeSeriesChart(timeSeriesChart, focuseChart, dateDimension, dateGroup);
     createFocuseChart(focuseChart, dateDimension2, dateGroup2);
+    createHeat(heatChart, heatDimension, heatGroup);
 
     dc.renderAll();
 }
@@ -88,19 +92,19 @@ function createTimeSeriesChart(chart, focuseChart, dimension, group) {
     .dimension(dimension)
     .mouseZoomable(false)
     .x(d3.time.scale())
-    .xUnits(d3.time.years)        
+    .xUnits(d3.time.years)
     .elasticX(true)
     .elasticY(true)
     .brushOn(false)
     .group(group)
     .valueAccessor(p => {
-        return p.value.count ? p.value.sum/p.value.count : 0.0 
+        return p.value.count ? p.value.sum/p.value.count : 0.0
     })
     .rangeChart(focuseChart)
 }
 
 function createFocuseChart(chart, dimension, group){
-    chart.width("1000") 
+    chart.width("1000")
     .height("40")
     .margins({top: 0, right: 50, bottom: 20, left: 40})
     .dimension(dimension)
@@ -131,4 +135,20 @@ function createMap(geoChart, dimension, group){
                 return "Country: " + d.key + "\nAverage Temperature: " + (d.value? d.value : 0);
             });
 }
-    
+
+function createHeat(chart, dimension, group) {
+  chart
+    .width(4 * 250 + 80)
+    .height(4 * 7 + 40)
+    .dimension(dimension)
+    .group(group)
+    .keyAccessor(function(d) { return d.key[0]; })
+    .valueAccessor(function(d) { return d.key[1]; })
+    .colorAccessor(function(d) { return +d.value; })
+    .title(function(d) {
+        return "Year:   " + d.key[0] + "\n" +
+               "Continent:  " + d.key[1] + "\n" +
+               "Temperature: " + d.value + "ºC";})
+    .colors(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+    .calculateColorDomain();
+}
