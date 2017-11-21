@@ -32,7 +32,6 @@ function visualization(err, res){
         element.dt = new Date(element.dt);
         element.AverageTemperature = parseFloat(element.AverageTemperature);
     });
-    console.log(data)
 
     var ndx = crossfilter(data);
 
@@ -45,8 +44,9 @@ function visualization(err, res){
     var countryGroup = countryDimension.group().reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
 
     var geoChart = dc.geoChoroplethChart("#geo-chart");
-    var focuseChart = dc.lineChart("#focus-time-series-chart");
     var timeSeriesChart = dc.lineChart("#time-series-chart");
+    var focuseChart = dc.lineChart("#focus-time-series-chart");
+    
 
     createMap(geoChart, countryDimension, countryGroup);
     createTimeSeriesChart(timeSeriesChart, focuseChart, dateDimension, dateGroup);
@@ -86,17 +86,17 @@ function createTimeSeriesChart(chart, focuseChart, dimension, group) {
     .height("400")
     .transitionDuration(1000)
     .dimension(dimension)
-    .mouseZoomable(false)
     .x(d3.time.scale())
-    .xUnits(d3.time.years)        
     .elasticX(true)
     .elasticY(true)
     .brushOn(false)
     .group(group)
+    .keyAccessor(function(p){
+        return new Date(p.key, 1);
+    })
     .valueAccessor(p => {
         return p.value.count ? p.value.sum/p.value.count : 0.0 
     })
-    .rangeChart(focuseChart)
 }
 
 function createFocuseChart(chart, dimension, group){
@@ -127,7 +127,6 @@ function createMap(geoChart, dimension, group){
                 }
             )
             .title(function(d){
-                if(!d.value) console.log(d.key);
                 return "Country: " + d.key + "\nAverage Temperature: " + (d.value? d.value : 0);
             });
 }
