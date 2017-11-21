@@ -33,6 +33,8 @@ function visualization(err, res){
         element.AverageTemperature = parseFloat(element.AverageTemperature);
     });
 
+    data = data.filter(d => !isNaN(d.AverageTemperature))
+
     var ndx = crossfilter(data);
 
     var dateDimension = ndx.dimension(d => d.dt);
@@ -86,9 +88,9 @@ function createTimeSeriesChart(chart, focuseChart, dimension, group) {
     .height("400")
     .transitionDuration(1000)
     .dimension(dimension)
-    .x(d3.time.scale())
-    .elasticX(true)
-    .elasticY(true)
+    .x(d3.time.scale().domain([new Date(1850, 0, 1), new Date(2013, 11, 31)]))
+    .rangeChart(focuseChart)
+    .y(d3.scale.linear().domain([-20, 40]))
     .brushOn(false)
     .group(group)
     .keyAccessor(function(p){
@@ -105,8 +107,14 @@ function createFocuseChart(chart, dimension, group){
     .margins({top: 0, right: 50, bottom: 20, left: 40})
     .dimension(dimension)
     .group(group)
-    .x(d3.time.scale().domain([new Date(1746, 0, 1), new Date(2012, 11, 31)]))
-    .xUnits(d3.time.years);
+    .x(d3.time.scale().domain([new Date(1850, 0, 1), new Date(2013, 11, 31)]))
+    .xUnits(d3.time.years)
+    .keyAccessor(function(p){
+        return new Date(p.key, 1);
+    })
+    .valueAccessor(p => {
+        return p.value.count ? p.value.sum/p.value.count : 0.0 
+    });
 }
 
 function createMap(geoChart, dimension, group){
