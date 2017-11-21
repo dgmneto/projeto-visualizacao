@@ -37,9 +37,11 @@ function visualization(err, res){
     var ndx = crossfilter(data);
 
     var dateDimension = ndx.dimension(d => d.dt);
+    var dateDimension2 = ndx.dimension(d => d.dt);    
     var countryDimension = ndx.dimension(d => d.Country);
 
-    var dateGroup = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
+    var dateGroup = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);    
+    var dateGroup2 = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
     var countryGroup = countryDimension.group().reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);
 
     var geoChart = dc.geoChoroplethChart("#geo-chart");
@@ -47,7 +49,8 @@ function visualization(err, res){
     var timeSeriesChart = dc.lineChart("#time-series-chart");
 
     createMap(geoChart, countryDimension, countryGroup);
-    createTimeSeriesChart(timeSeriesChart, focuseChart, dateDimension, dateGroup)
+    createTimeSeriesChart(timeSeriesChart, focuseChart, dateDimension, dateGroup);
+    createFocuseChart(focuseChart, dateDimension2, dateGroup2);
 
     dc.renderAll();
 }
@@ -77,8 +80,8 @@ function avgTmpInit(p, v){
     };
 }
 
-function createTimeSeriesChart(dcTimeSeriesChart, focuseChart, dimension, group) {
-    dcTimeSeriesChart
+function createTimeSeriesChart(chart, focuseChart, dimension, group) {
+    chart
     .width("1000")
     .height("400")
     .transitionDuration(1000)
@@ -94,14 +97,16 @@ function createTimeSeriesChart(dcTimeSeriesChart, focuseChart, dimension, group)
         return p.value.count ? p.value.sum/p.value.count : 0.0 
     })
     .rangeChart(focuseChart)
+}
 
-    focuseChart.width("1000") 
-               .height("40")
-               .margins({top: 0, right: 50, bottom: 20, left: 40})
-               .dimension(dimension)
-               .group(group)
-               .x(d3.time.scale().domain([new Date(1746, 0, 1), new Date(2012, 11, 31)]))
-               .xUnits(d3.time.years);
+function createFocuseChart(chart, dimension, group){
+    chart.width("1000") 
+    .height("40")
+    .margins({top: 0, right: 50, bottom: 20, left: 40})
+    .dimension(dimension)
+    .group(group)
+    .x(d3.time.scale().domain([new Date(1746, 0, 1), new Date(2012, 11, 31)]))
+    .xUnits(d3.time.years);
 }
 
 function createMap(geoChart, dimension, group){
