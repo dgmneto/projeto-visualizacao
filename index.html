@@ -29,10 +29,18 @@
             }
     </style>
     </head>
-    <body>
-            <div id="geo-chart"></div>
-            <div id="focus-time-series-chart"></div>
+    <body hidden>
+            <div id="groups"></div>
+            <div id="create-button">
+                <button onclick="criarGrupoCallback()">Criar</button>
+            </div>
+            <div id="group-buttons">
+
+            </div>
             <div id="time-series-chart"></div>
+        <script src="util.js"></script>
+        <script src="models/group.js"></script>
         <script src="index.js"></script>
+        <script src="handler.js"></script>
     </body>
 </html>
