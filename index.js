@@ -24,9 +24,6 @@ function visualization(err, res){
         alert("Some unexpected erro ocurred while trying to download the data");
         return;
     };
-
-    document.getElementById("loading-status")
-    .innerHTML = "Baixado";
     
     data.forEach(element => {
         element.dt = new Date(element.dt);
