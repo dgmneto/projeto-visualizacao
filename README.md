@@ -5,7 +5,7 @@ This repository is a result of a Data Visualization project. The main purpose of
 ## Motivation
 
 The global climate is (or should be) a concern to the socienty since we began to experience the consequences of the global warming. Currently, there is a poor set of tools to analyze and comprehend available data on the subject.
-The average global temperature increase is about 1°C every year, and we seem to neglect the severity of that. This project comes as a (*humble*) attempt to understand the data and contribute in some way to mitigate the effects of that.
+The average global temperature increase is about 1°C every century, and we seem to neglect the severity of that. This project comes as a (*humble*) attempt to understand the data and contribute in some way to mitigate the effects of that.
 
 ## Data sources
 
