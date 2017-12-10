@@ -25,6 +25,7 @@ function avgTmpInit(p, v){
 
 function createGeoChart(parentNode, dimension, group) {
     var element = document.createElement("div");
+    element.style.gridArea = 'BBB';
     element.id = `geo-chart-${makeid()}`;
 
     var chart = dc.geoChoroplethChart(element);
@@ -53,6 +54,7 @@ function createGeoChart(parentNode, dimension, group) {
 
 function createTimeFocuseChart(parentNode, dimension, group){
     var element = document.createElement("div");
+    element.style.gridArea = 'CCC';
     element.id = `focuse-chart-${makeid()}`;
 
     var chart = dc.lineChart(element);
@@ -78,3 +80,23 @@ function makeid() {
   
     return text;
   }
+
+function createSuggestionDiv(anchorElement) {
+    var ret = document.createElement('div');
+    ret.style.gridArea = 'AAA';
+    anchorElement.appendChild(ret);
+    var header = document.createElement('h3')
+    header.innerText = "Sugestões"
+    ret.appendChild(header);
+    return ret;
+}
+
+function createHeaderDiv(anchorElement, title) {
+    var ret = document.createElement('div')
+    ret.style.gridArea = 'DDD';
+    anchorElement.appendChild(ret)
+    var header = document.createElement('h2')
+    header.innerText = title;
+    ret.appendChild(header);
+    return ret;
+}

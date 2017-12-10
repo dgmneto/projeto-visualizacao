@@ -27,17 +27,34 @@
                 stroke: black;
                 stroke-width: 3px;
             }
+            .grid {
+                display: grid;
+                grid-template-areas: 
+                    "EEE"
+                    "CCC"
+                    "DDD";
+            }
+            #groups {
+                grid-area: "EEE";
+            }
+            #group-buttons {
+                grid-area: "CCC";
+            }
+            #time-series-chart {
+                grid-area: "DDD";
+            }
     </style>
     </head>
     <body hidden>
-            <div id="groups"></div>
-            <div id="create-button">
-                <button onclick="criarGrupoCallback()">Criar</button>
+            <div class="grid">
+                <div id="groups"></div>
+                <div id="group-buttons">
+                    <button onclick="criarGrupoCallback()">+</button>
+    
+                </div>
+                <div id="time-series-chart"></div>
             </div>
-            <div id="group-buttons">
-
-            </div>
-            <div id="time-series-chart"></div>
+        <script src="similarity.js"></script>
         <script src="util.js"></script>
         <script src="models/group.js"></script>
         <script src="index.js"></script>

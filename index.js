@@ -1,4 +1,4 @@
-var data, geojson;
+var data, geojson, similars;
 
 var q = d3.queue();
 
@@ -16,6 +16,13 @@ q.defer(function(callback){
     });
 });
 
+q.defer(function(callback){
+    d3.csv('data/similar.csv', function(res){
+        similars = res;
+        callback(null, res);
+    })
+})
+
 q.awaitAll(visualization);
 
 var timeSeriesChart = dc.compositeChart("#time-series-chart");
@@ -26,6 +33,8 @@ function visualization(err, res){
         alert("Some unexpected erro ocurred while trying to download the data");
         return;
     };
+
+    setSimilarityData(similars);
 
     data.forEach(element => {
         element.dt = new Date(element.dt);
@@ -43,7 +52,8 @@ function createTimeSeriesChart(chart) {
     .width("1000")
     .height("400")
     .x(d3.time.scale().domain([new Date(1850, 0, 1), new Date(2013, 11, 31)]))
-    .y(d3.scale.linear().domain([-20, 40]))
+    .y(d3.scale.linear().domain([-40, 40]))
+    .elasticY(true)
     .brushOn(false)
     .transitionDuration(0);
 }
