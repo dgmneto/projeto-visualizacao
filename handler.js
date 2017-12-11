@@ -27,7 +27,6 @@ function createGroupSelectionCallback(idx) {
         groups[i].selectedCountriesGroup.style.display = 'block';        
         groups[i].geoChart.render();
         groups[i].button.classList.remove('deselected');
-        //groups[i].focusChart.render();
       } else {
         groups[i].geoGroup.style.display = 'none';
         groups[i].suggestionGroup.style.display = 'none';

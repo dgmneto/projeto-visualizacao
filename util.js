@@ -50,6 +50,8 @@ function createGeoChart(parentNode, dimension, group) {
     return chart
 }
 
+
+
 function makeid() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

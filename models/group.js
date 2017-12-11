@@ -19,7 +19,7 @@ class Group {
     document.getElementById("selectedCountries").appendChild(this.selectedCountriesGroup);
 
     this.geoChart = createGeoChart(this.geoGroup, this.countryDimension, this.countryGroup)
-      .on('filtered', this.updateSelectedCountries.bind(this))
+      .on('filtered', this.handleSelection.bind(this))
     this.buildLineChart = this.buildLineChart.bind(this);
   }
 
@@ -60,6 +60,8 @@ class Group {
   }
 
   updateSugestions(chart) {
+
+    
     var bestSugestions = getNextSimilars(chart.filters());
     var oldChild = this.suggestionGroup.querySelectorAll('[name=suggestionList]');
     if(oldChild.length != 0)
