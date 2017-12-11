@@ -25,13 +25,12 @@ function avgTmpInit(p, v){
 
 function createGeoChart(parentNode, dimension, group) {
     var element = document.createElement("div");
-    element.style.gridArea = 'BBB';
     element.id = `geo-chart-${makeid()}`;
 
     var chart = dc.geoChoroplethChart(element);
-    chart.width(990)
+    chart.width(950)
         .height(500)
-        .projection(d3.geo.mercator())
+        .projection(d3.geo.mercator().scale(150).translate([478, 300]))
         .colors(d3.scale.linear()
                         .domain([-10, 30])
                         .interpolate(d3.interpolateRgb)
@@ -47,28 +46,8 @@ function createGeoChart(parentNode, dimension, group) {
         })
         .dimension(dimension)
         .group(group);
-
     parentNode.appendChild(element);
     return chart
-}
-
-function createTimeFocuseChart(parentNode, dimension, group){
-    var element = document.createElement("div");
-    element.style.gridArea = 'CCC';
-    element.id = `focuse-chart-${makeid()}`;
-
-    var chart = dc.lineChart(element);
-    chart.width("1000") 
-        .height("40")
-        .margins({top: 0, right: 50, bottom: 20, left: 40})
-        .x(d3.time.scale().domain([new Date(1850, 0, 1), new Date(2013, 11, 31)]))
-        .xUnits(d3.time.years)
-        .dimension(dimension)
-        .group(group)
-        .yAxis().ticks(0);
-
-    parentNode.appendChild(element);
-    return chart;
 }
 
 function makeid() {
@@ -79,24 +58,4 @@ function makeid() {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
   
     return text;
-  }
-
-function createSuggestionDiv(anchorElement) {
-    var ret = document.createElement('div');
-    ret.style.gridArea = 'AAA';
-    anchorElement.appendChild(ret);
-    var header = document.createElement('h3')
-    header.innerText = "Sugestões"
-    ret.appendChild(header);
-    return ret;
-}
-
-function createHeaderDiv(anchorElement, title) {
-    var ret = document.createElement('div')
-    ret.style.gridArea = 'DDD';
-    anchorElement.appendChild(ret)
-    var header = document.createElement('h2')
-    header.innerText = title;
-    ret.appendChild(header);
-    return ret;
 }

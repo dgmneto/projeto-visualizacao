@@ -5,15 +5,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Document</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
         <script src="https://dc-js.github.io/dc.js/js/d3.js"></script>
         <script src="https://d3js.org/d3-queue.v3.min.js"></script>    
         <script src="https://dc-js.github.io/dc.js/js/crossfilter.js"></script>
         <script src="https://dc-js.github.io/dc.js/js/dc.js"></script>
         <style>
+            .row{
+                margin-bottom: 0px;
+            }
+            .grid-line{
+                stroke: cadetblue;
+                stroke-width: 0.1;
+            }
+            .container{
+                width: 90%;
+            }
+           .card{
+               height: 500px;
+           }
             path.line {
-            fill: none;
-            stroke: cornflowerblue;
-            stroke-width: 1.5px;
+                fill: none;
+                stroke-width: 1.5px;
             }
             path.domain{
                 fill-opacity: 0;
@@ -23,41 +36,73 @@
             rect.extent{
                 fill:cornflowerblue;
             }
-            g.selected > path {
+            .deselected {
+                opacity: 0.25;
+                fill-opacity: 0.25;
+            }
+            g.Country.highlighted{
                 stroke: black;
-                stroke-width: 3px;
             }
-            .grid {
-                display: grid;
-                grid-template-areas: 
-                    "EEE"
-                    "CCC"
-                    "DDD";
-            }
-            #groups {
-                grid-area: "EEE";
-            }
-            #group-buttons {
-                grid-area: "CCC";
-            }
-            #time-series-chart {
-                grid-area: "DDD";
+            g.Country > path{
+                stroke: white;
+                stroke-width: 0.75px;
             }
     </style>
     </head>
-    <body hidden>
-            <div class="grid">
-                <div id="groups"></div>
-                <div id="group-buttons">
-                    <button onclick="criarGrupoCallback()">+</button>
-    
-                </div>
-                <div id="time-series-chart"></div>
+    <body hidden style="background: cadetblue;">
+        <nav>
+            <div class="nav-wrapper" style="background: rgb(244, 67, 54);">
+                <a class="brand-logo center">Global Climate Change</a>
             </div>
+        </nav>
+        <div class="container" style="margin-top:20px;">
+            <div class="row">
+                <div class="col s9">
+                    <div class="card white">
+                        <div class="card-content" style="padding: 0;">
+                            <div id="geochart"></div>                               
+                        </div>
+                    </div>                   
+                </div>
+                <div class="col s3">
+                    <div class="card white">
+                        <div class="card-content">
+                            <span class="card-title">Grupos de Países 
+                                <button class="btn-floating waves-effect waves-light red" onclick="criarGrupoCallback()">+</button>
+                            </span>
+                            <br/>
+                            <div id="group-buttons"></div>
+                            <div id="selectedCountries"></div>             
+                        </div>
+                    </div>                       
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col s9">
+                        <div class="card white">
+                            <div class="card-content">
+                                <div id="focusechart"></div>                                                                                            
+                                <div id="timechart"></div>                                                        
+                            </div>
+                        </div>                              
+                    </div>
+                    <div class="col s3">
+                        <div class="card white">
+                            <div class="card-content">
+                                <span class="card-title">Mudanças Semelhantes</span>  
+                                <div id="suggestions"></div>                   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+         
         <script src="similarity.js"></script>
         <script src="util.js"></script>
         <script src="models/group.js"></script>
         <script src="index.js"></script>
         <script src="handler.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>        
     </body>
 </html>
