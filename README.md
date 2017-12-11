@@ -11,7 +11,7 @@ The average global temperature increase is about 1°C every century, and we seem
 
 All the  data used to produce the visualizations are publicly available at:
 * Climate data: https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data.
-* Location data: (Higor delete isso)
+* Location data: https://github.com/johan/world.geo.json/blob/master/countries.geo.json
 
 This is a preview from the climate available *CSV*s:
 
