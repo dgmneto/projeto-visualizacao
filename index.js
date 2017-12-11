@@ -26,7 +26,6 @@ q.defer(function(callback){
 q.awaitAll(visualization);
 
 var timeSeriesChart = dc.compositeChart("#timechart");
-//var focuseChart = dc.lineChart("#focusechart");
 
 function visualization(err, res){
     if(err) {
@@ -43,39 +42,23 @@ function visualization(err, res){
     });
 
     data = data.filter(d => !isNaN(d.AverageTemperature))
-    
-   /* var ndx = crossfilter(data);
-    var dateDimension = ndx.dimension(d => d.dt);
-    var dateGroup = dateDimension.group(d => d.getFullYear()).reduce(avgTmpAdd, avgTmpRemove, avgTmpInit);*/
-    //createTimeFocuseChart(focuseChart, dateDimension, dateGroup);
-    
-    createTimeSeriesChart(timeSeriesChart/*, focuseChart*/);
-    criarGrupoCallback();
 
     document.body.removeAttribute('hidden');
+    
+    createTimeSeriesChart(timeSeriesChart);
+    criarGrupoCallback();
 }
 
-function createTimeSeriesChart(chart/*, focuseChart*/) {
+function createTimeSeriesChart(chart) {
     chart
-    .width("950")
+    .width(document.getElementById('timechart-parent-element').offsetWidth)
     .height("475")
     .renderHorizontalGridLines(true)
     .renderVerticalGridLines(true)
     .x(d3.time.scale().domain([new Date(1880, 0, 1), new Date(2013, 11, 31)]))
     .y(d3.scale.linear().domain([-40, 40]))
-    //.rangeChart(focuseChart)
     .elasticY(true)
     .elasticX(false)
     .brushOn(false)
     .transitionDuration(0.25);
 }
-
-/*function createTimeFocuseChart(chart, dimension, group){
-    chart.width("950") 
-        .height("40")
-        .x(d3.time.scale().domain([new Date(1850, 0, 1), new Date(2013, 11, 31)]))
-        .xUnits(d3.time.years)
-        .dimension(dimension)
-        .group(group)
-        .yAxis().ticks(0);
-}*/

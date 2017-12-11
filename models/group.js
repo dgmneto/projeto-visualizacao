@@ -60,8 +60,6 @@ class Group {
   }
 
   updateSugestions(chart) {
-
-    
     var bestSugestions = getNextSimilars(chart.filters());
     var oldChild = this.suggestionGroup.querySelectorAll('[name=suggestionList]');
     if(oldChild.length != 0)
@@ -74,10 +72,11 @@ class Group {
       var newButton = document.createElement('button');
       newButton.className = "btn waves-effect waves-light red collection-item";
       newButton.innerHTML = i;
-      newButton.onclick = ((a, b) => () => {
+      newButton.onclick = ((a, b, c) => () => {
         b.filter(a);
-        b.render();
-      })(i, chart);
+        b.redraw();
+        c.redraw();
+      })(i, chart, timeSeriesChart);
       newListItem.appendChild(newButton);
       newList.appendChild(newListItem);
     }
