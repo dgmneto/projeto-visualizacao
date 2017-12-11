@@ -61,7 +61,7 @@ function createTimeSeriesChart(chart/*, focuseChart*/) {
     .height("475")
     .renderHorizontalGridLines(true)
     .renderVerticalGridLines(true)
-    .x(d3.time.scale().domain([new Date(1850, 0, 1), new Date(2013, 11, 31)]))
+    .x(d3.time.scale().domain([new Date(1880, 0, 1), new Date(2013, 11, 31)]))
     .y(d3.scale.linear().domain([-40, 40]))
     //.rangeChart(focuseChart)
     .elasticY(true)
